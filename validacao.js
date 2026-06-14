@@ -7,16 +7,14 @@ function fnValidacao() {
     const filmeTituloOriginal = TituloOriginal.value.trim().replace(/\s+/g, ' ');
 
     const AnoProducao = document.getElementById('anoProducao');
-    const anoProducao = AnoProducao.value.trim();
-    const anoProducao = parseInt(anoProducao);
+    const anoProducaoRaw = AnoProducao.value.trim();
 
     const DataLancamento = document.getElementById('dataLancamento');
     const dataLancamento = DataLancamento.value;
-    const dataLancamentoAno = new Date(dataLancamento + 'T00:00:00').getFullYear();
+    const dataLancamentoAno = dataLancamento ? new Date(dataLancamento + 'T00:00:00').getFullYear() : null;
 
     const DuracaoMinutos = document.getElementById('duracaoMinutos');
-    const duracaoMinutos = DuracaoMinutos.value.trim();
-    const duracaoMinutos = parseInt(duracaoMinutos);
+    const duracaoMinutosRaw = DuracaoMinutos.value.trim();
 
     const GeneroPrincipal = document.getElementById('generoPrincipal');
     const generoPrincipal = GeneroPrincipal.value;
@@ -48,16 +46,13 @@ function fnValidacao() {
     const distribuidora = Distribuidora.value.trim().replace(/\s+/g, ' ');
 
     const Orcamento = document.getElementById('orcamento');
-    const orcamento = Orcamento.value.trim();
-    const orcamento = parseFloat(orcamento);
+    const orcamento = parseFloat(Orcamento.value.trim());
 
     const ReceitaBilheteria = document.getElementById('receitaBilheteria');
-    const receitaBilheteriaRaw = ReceitaBilheteria.value.trim();
-    const receitaBilheteria = parseFloat(receitaBilheteria);
+    const receitaBilheteria = parseFloat(ReceitaBilheteria.value.trim());
 
     const NotaMedia = document.getElementById('notaMedia');
-    const notaMedia = NotaMedia.value.trim();
-    const notaMedia = parseFloat(notaMedia);
+    const notaMedia = parseFloat(NotaMedia.value.trim());
 
     const Status = document.getElementById('status');
     const status = Status.value;
@@ -66,189 +61,201 @@ function fnValidacao() {
     const Streaming = document.getElementById('streaming');
     const disponibilidadeStreaming = Streaming.value;
     const disponibilidadesPermitidas = ['Sim', 'Não'];
+
+    // Regex 
     const regexNumeros = /^\d+$/;
     const regexNomeDiretor = /^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/;
+    const anoAtual = new Date().getFullYear();
 
-    let anoAtual = new Date().getFullYear();
+    // ---- VALIDAÇÕES ----
 
     // Título do Filme
     if (filmeTitulo.length < 1) {
-        alert(TituloFilme, "O título informado é muito curto."); 
-        return
+        alert("O título informado é muito curto."); 
+        return;
     }
-
-
     if (filmeTitulo.length > 200) { 
-
-        alert(TituloFilme, "O título informado é muito longo."); 
-        return
-
+        alert("O título informado é muito longo."); 
+        return;
     }
 
     // Título Original
     if (filmeTituloOriginal.length < 1) { 
-        alert(TituloOriginal, "O título original informado é muito curto."); 
-        return
+        alert("O título original informado é muito curto."); 
+        return;
     }
     if (filmeTituloOriginal.length > 200) {
-        alert(TituloOriginal, "O título original informado é muito longo.");
-        return
+        alert("O título original informado é muito longo.");
+        return;
     }
 
     // Ano de Produção
-    if (!regexNumeros.test(anoProducao) || anoProducao <= 1888) { 
-        alert(AnoProducao, "Informe um ano de produção válido (maior que 1888).");
-        return 
+    if (!regexNumeros.test(anoProducaoRaw)) {
+        alert("O ano de produção deve conter apenas números.");
+        return;
+    }
+    const anoProducao = parseInt(anoProducaoRaw);
+    if (anoProducao <= 1888) { 
+        alert("Informe um ano de produção válido (maior que 1888).");
+        return;
     }
     if (anoProducao > anoAtual + 5) { 
-        alert(AnoProducao, "O ano de produção informado não pode ser depois de 5 anos no futuro.");
-        return
+        alert("O ano de produção informado não pode ser depois de 5 anos no futuro.");
+        return;
     }
 
     // Data de Lançamento
     if (!dataLancamento) { 
-        alert(DataLancamento, "Informe uma data de lançamento válida.");
-        return
+        alert("Informe uma data de lançamento válida.");
+        return;
     }
     if (dataLancamentoAno < anoProducao) { 
-        alert(DataLancamento, "A data de lançamento possui um conflito com o ano de produção.");
-        return
+        alert("A data de lançamento possui um conflito com o ano de produção.");
+        return;
     }
     if (dataLancamentoAno > anoAtual + 5) { 
-        alert(DataLancamento, "A data de lançamento não pode ser depois de 5 anos no futuro.");
-        return
+        alert("A data de lançamento não pode ser depois de 5 anos no futuro.");
+        return;
     }
 
     // Duração (Minutos)
-    if (!regexNumeros.test(duracaoMinutos)) { 
-        alert(DuracaoMinutos, "Informe uma duração válida (somente números inteiros).");
-        return
+    if (!regexNumeros.test(duracaoMinutosRaw)) { 
+        alert("Informe uma duração válida (somente números inteiros).");
+        return;
     }
+    const duracaoMinutos = parseInt(duracaoMinutosRaw);
     if (duracaoMinutos < 1) { 
-        alert(DuracaoMinutos, "A duração informada é muito curta.");
-        return
+        alert("A duração informada é muito curta.");
+        return;
     }
     if (duracaoMinutos > 600) { 
-        alert(DuracaoMinutos, "A duração informada é muito longa.");
-        return
+        alert("A duração informada é muito longa.");
+        return;
     }
 
     // Gênero Principal
     if (!generoPrincipal) { 
-        alert(GeneroPrincipal, "Selecione um gênero principal.");
-        return
+        alert("Selecione um gênero principal.");
+        return;
     }
     if (!generosPermitidos.some(g => g.toLowerCase() === generoPrincipal.toLowerCase())) {
-         alert(GeneroPrincipal, "O gênero principal informado é inválido.");
-         return
-        }
+         alert("O gênero principal informado é inválido.");
+         return;
+    }
 
     // Subgênero
     if (!subgenero) { 
-        alert(Subgenero, "Selecione um subgênero.");
-        return
+        alert("Selecione um subgênero.");
+        return;
     }
     if (!subgenerosPermitidos.some(s => s.toLowerCase() === subgenero.toLowerCase())) {
-         alert(Subgenero, "O subgênero informado é inválido.");
-         return
+         alert("O subgênero informado é inválido.");
+         return;
     }
 
     // Classificação Indicativa
     if (!classificacao) { 
-         alert(Classificacao, "Selecione a classificação indicativa.");
-         return
+         alert("Selecione a classificação indicativa.");
+         return;
     }
     if (!classificacoesPermitidas.some(c => c.toLowerCase() === classificacao.toLowerCase())) {
-         alert(Classificacao, "A classificação indicativa informada é inválida.");
-         return
+         alert("A classificação indicativa informada é inválida.");
+         return;
     }
 
     // País de Origem
     if (!paisOrigem) { 
-        alert(PaisOrigem, "Selecione o país de origem.");
-        return
+        alert("Selecione o país de origem.");
+        return;
     }
     if (!paisesPermitidos.some(p => p.toLowerCase() === paisOrigem.toLowerCase())) { 
-        alert(PaisOrigem, "O país de origem informado é inválido.");
-        return
+        alert("O país de origem informado é inválido.");
+        return;
     }
 
     // Idioma Original
     if (!idiomaOriginal) { 
-        alert(IdiomaOriginal, "Selecione o idioma original.");
-        return
+        alert("Selecione o idioma original.");
+        return;
     }
     if (!idiomasPermitidos.some(i => i.toLowerCase() === idiomaOriginal.toLowerCase())) { 
-        alert(IdiomaOriginal, "O idioma original informado é inválido.");
-        return
+        alert("O idioma original informado é inválido.");
+        return;
     }
 
     // Diretor
     if (nomeDiretor.length < 2) { 
-        alert(Diretor, "O nome completo do diretor deve ser informado.");
-        return
+        alert("O nome completo do diretor deve ser informado.");
+        return;
     }
     if (nomeDiretor.length > 150) { 
-        alert(Diretor, "O nome do diretor informado é muito longo.");
-        return
+        alert("O nome do diretor informado é muito longo.");
+        return;
     }
     if (!regexNomeDiretor.test(nomeDiretor)) { 
-        alert(Diretor, "Informe um nome válido para o diretor (Nome e Sobrenome).");
-        return
+        alert("Informe um nome válido para o diretor (Nome e Sobrenome).");
+        return;
     }
 
     // Produtora
     if (produtora.length < 2) { 
-        alert(Produtora, "O nome informado da produtora é muito curto.");
-        return
+        alert("O nome informado da produtora é muito curto.");
+        return;
     }
     if (produtora.length > 200) { 
-        alert(Produtora, "O nome informado da produtora é muito longo.");
-        return
+        alert("O nome informado da produtora é muito longo.");
+        return;
     }
 
     // Distribuidora
     if (distribuidora.length < 2) { 
-        alert(Distribuidora, "O nome informado da distribuidora é muito curto.");
-        return
+        alert("O nome informado da distribuidora é muito curto.");
+        return;
     }
     if (distribuidora.length > 200) { 
-        alert(Distribuidora, "O nome informado da distribuidora é muito longo.");
-        return
+        alert("O nome informado da distribuidora é muito longo.");
+        return;
     }
 
     // Orçamento
-    if (orcamento === "" || isNaN(orcamento) || orcamento < 0) { 
-        alert(Orcamento, "O orçamento informado deve ser um valor numérico válido maior ou igual a zero.");
-        return
+    if (isNaN(orcamento) || orcamento < 0) { 
+        alert("O orçamento informado deve ser um valor numérico válido maior ou igual a zero.");
+        return;
     }
 
     // Receita de Bilheteria
-    if (receitaBilheteria === "" || isNaN(receitaBilheteria) || receitaBilheteria < 0) { 
-        alert(ReceitaBilheteria, "A receita de bilheteria deve ser um valor numérico válido maior ou igual a zero.");
-        return
+    if (isNaN(receitaBilheteria) || receitaBilheteria < 0) { 
+        alert("A receita de bilheteria deve ser um valor numérico válido maior ou igual a zero.");
+        return;
     }
 
     // Nota Média
-    if (notaMedia === "" || isNaN(notaMedia) || notaMedia < 0 || notaMedia > 10) { 
-        alert(NotaMedia, "A nota média deve ser um número entre 0 e 10.");
-        return
+    if (isNaN(notaMedia) || notaMedia < 0 || notaMedia > 10) { 
+        alert("A nota média deve ser um número entre 0 e 10.");
+        return;
     }
 
     // Status
     if (!status) { 
-        alert(Status, "Selecione o status atual do filme."); 
-        return
+        alert("Selecione o status atual do filme."); 
+        return;
     }
     if (!statusPermitidos.some(s => s.toLowerCase() === status.toLowerCase())) { 
-        alert(Status, "O status informado é inválido."); 
-        return
+        alert("O status informado é inválido."); 
+        return;
     }
 
     // Disponibilidade de Streaming
     if (!disponibilidadeStreaming) { 
-        alert(Streaming, "Selecione se está disponível para streaming."); 
-        return
+        alert("Selecione se está disponível para streaming."); 
+        return;
+    }
+    if (!disponibilidadesPermitidas.some(d => d.toLowerCase() === disponibilidadeStreaming.toLowerCase())) { 
+        alert("A opção de disponibilidade de streaming é inválida."); 
+        return;
     }
 
+    
+    alert("Formulário validado com sucesso!");
+    return true;
 }
