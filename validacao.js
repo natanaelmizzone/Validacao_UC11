@@ -7,14 +7,14 @@ function fnValidacao() {
     const filmeTituloOriginal = TituloOriginal.value.trim().replace(/\s+/g, ' ');
 
     const AnoProducao = document.getElementById('anoProducao');
-    const anoProducaoRaw = AnoProducao.value.trim();
+    const anoProducao = AnoProducao.value.trim();
 
     const DataLancamento = document.getElementById('dataLancamento');
     const dataLancamento = DataLancamento.value;
     const dataLancamentoAno = dataLancamento ? new Date(dataLancamento + 'T00:00:00').getFullYear() : null;
 
     const DuracaoMinutos = document.getElementById('duracaoMinutos');
-    const duracaoMinutosRaw = DuracaoMinutos.value.trim();
+    const duracaoMinutos = DuracaoMinutos.value.trim();
 
     const GeneroPrincipal = document.getElementById('generoPrincipal');
     const generoPrincipal = GeneroPrincipal.value;
@@ -90,11 +90,11 @@ function fnValidacao() {
     }
 
     // Ano de Produção
-    if (!regexNumeros.test(anoProducaoRaw)) {
+    if (!regexNumeros.test(anoProducao)) {
         alert("O ano de produção deve conter apenas números.");
         return;
     }
-    const anoProducao = parseInt(anoProducaoRaw);
+    const anoProducao = parseInt(anoProducao);
     if (anoProducao <= 1888) { 
         alert("Informe um ano de produção válido (maior que 1888).");
         return;
@@ -119,11 +119,11 @@ function fnValidacao() {
     }
 
     // Duração (Minutos)
-    if (!regexNumeros.test(duracaoMinutosRaw)) { 
+    if (!regexNumeros.test(duracaoMinutos)) { 
         alert("Informe uma duração válida (somente números inteiros).");
         return;
     }
-    const duracaoMinutos = parseInt(duracaoMinutosRaw);
+    const duracaoMinutos = parseInt(duracaoMinutos);
     if (duracaoMinutos < 1) { 
         alert("A duração informada é muito curta.");
         return;
